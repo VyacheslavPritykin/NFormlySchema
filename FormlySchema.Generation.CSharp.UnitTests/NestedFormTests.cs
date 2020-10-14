@@ -24,6 +24,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 new FormlyFieldConfig
                 {
                     Key = nameof(Parent.EmptyChild),
+                    FieldGroupClassName = "custom-class",
                     FieldGroup = FormlyFieldConfigCollection.Empty
                 },
                 new FormlyFieldConfig
@@ -44,6 +45,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
 
     class Parent
     {
+        [FieldGroupClassName("custom-class")]
         public EmptyChild EmptyChild { get; set; }
         
         public ChildWithData ChildWithData { get; set; }

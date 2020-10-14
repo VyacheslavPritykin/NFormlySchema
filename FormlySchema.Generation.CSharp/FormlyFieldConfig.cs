@@ -1,4 +1,5 @@
-﻿namespace FormlySchema.Generation.CSharp
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace FormlySchema.Generation.CSharp
 {
     public class FormlyFieldConfig
     {
@@ -11,7 +12,9 @@
         public Validation? Validation { get; set; }
         public WrapperCollection? Wrappers { get; set; }
         public Validators? Validators { get; set; }
+        public string? FieldGroupClassName { get; set; }
         public FormlyFieldConfigCollection? FieldGroup { get; set; }
         public FormlyFieldConfig? FieldArray { get; set; }
+        public string? ClassName { get; set; }
     }
 }

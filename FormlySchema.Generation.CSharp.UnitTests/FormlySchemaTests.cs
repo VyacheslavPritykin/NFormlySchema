@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
@@ -36,7 +35,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         {
             // act
             var schema = Formly.Generate<Foo>();
-            
+
             // assert
             schema.Should().BeEquivalentTo(
                 new FormlyFieldConfig
@@ -404,8 +403,14 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                             Text = "left text",
                         }
                     }
+                },
+                new FormlyFieldConfig
+                {
+                    Key = nameof(Foo.WithClassName),
+                    Type = "input",
+                    ClassName = "custom-class",
                 });
-            
+
             LogSchema(schema);
         }
 
@@ -413,18 +418,18 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         {
             _testOutputHelper.WriteLine(schema.ToJson());
         }
-        
+
         [Fact]
         public void DataTypeAttribute()
         {
             // act
             var schema = Formly.Generate<VariousInputTypes>();
-            
+
             // assert
             schema.Should().BeEquivalentTo(
                 new FormlyFieldConfig
                 {
-                    Key = "DateTime",
+                    Key = nameof(VariousInputTypes.DateTime),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -433,7 +438,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Date",
+                    Key = nameof(VariousInputTypes.Date),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -442,7 +447,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Time",
+                    Key = nameof(VariousInputTypes.Time),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -451,12 +456,12 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Duration",
+                    Key = nameof(VariousInputTypes.Duration),
                     Type = "input",
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "PhoneNumber",
+                    Key = nameof(VariousInputTypes.PhoneNumber),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -465,7 +470,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Currency",
+                    Key = nameof(VariousInputTypes.Currency),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -474,7 +479,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Text",
+                    Key = nameof(VariousInputTypes.Text),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -483,17 +488,17 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Html",
+                    Key = nameof(VariousInputTypes.Html),
                     Type = "textarea",
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "MultilineText",
+                    Key = nameof(VariousInputTypes.MultilineText),
                     Type = "textarea",
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "EmailAddress",
+                    Key = nameof(VariousInputTypes.EmailAddress),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -502,7 +507,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Password",
+                    Key = nameof(VariousInputTypes.Password),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -511,7 +516,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Url",
+                    Key = nameof(VariousInputTypes.Url),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -520,7 +525,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "ImageUrl",
+                    Key = nameof(VariousInputTypes.ImageUrl),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -529,7 +534,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "CreditCard",
+                    Key = nameof(VariousInputTypes.CreditCard),
                     Type = "input",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -538,12 +543,12 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "PostalCode",
+                    Key = nameof(VariousInputTypes.PostalCode),
                     Type = "input",
                 },
                 new FormlyFieldConfig
                 {
-                    Key = "Upload",
+                    Key = nameof(VariousInputTypes.Upload),
                     Type = "file",
                     TemplateOptions = new FormlyTemplateOptions
                     {
@@ -551,7 +556,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                     }
                 }
             );
-            
+
             _testOutputHelper.WriteLine(schema.ToJson());
         }
     }
@@ -560,7 +565,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
     {
     }
 
-    enum Color
+    internal enum Color
     {
         Red,
         Green,
@@ -569,11 +574,10 @@ namespace FormlySchema.Generation.CSharp.UnitTests
 
     enum MarketingColor
     {
-        [Display(Name = "Midnight Green")]
-        [JsonProperty(PropertyName = "GreenColor")]
+        [Display(Name = "Midnight Green")] [JsonProperty(PropertyName = "GreenColor")]
         Green,
-        [Display(Name = "Deep Blue")]
-        [DataMember(Name = "BlueColor")]
+
+        [Display(Name = "Deep Blue")] [DataMember(Name = "BlueColor")]
         Blue
     }
 
@@ -606,8 +610,8 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         [DefaultValue("Dan")]
         public string FirstName { get; set; }
 
-        public static string Static { get; set; } 
-        
+        public static string Static { get; set; }
+
         public bool? IsMarried { get; set; }
 
         public DateTime? Dob { get; set; }
@@ -647,7 +651,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
 
         [HideExpression("some expression")]
         public string HideExpression { get; set; }
-        
+
         [HideExpression("(model) => !this.model.firstName", IsFunction = true)]
         public string HideExpressionFunction { get; set; }
 
@@ -657,78 +661,81 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         [ExpressionProperty("templateOptions.disabled", "!model.text")]
         [ExpressionProperty("a", "b")]
         public string ExpressionProperty { get; set; }
-        
+
         [ExpressionProperty("a", "() => b", IsFunction = true)]
         public string ExpressionPropertyFunction { get; set; }
 
         [Range(5, 10)]
         public int RangeInt { get; set; }
-        
+
         [Range(5.5, 10.5)]
         public int RangeDouble { get; set; }
-        
+
         [MaxLength(5, ErrorMessage = "Custom")]
         public string MaxLength { get; set; }
-        
+
         [MinLength(5, ErrorMessage = "Custom")]
         public string MinLength { get; set; }
 
         [RegularExpression("[a-z]")]
         public string RegExp { get; set; }
-        
+
         [ReadOnly(true)]
         public string ReadOnly { get; set; }
-        
+
         [Description("Custom")]
         public string Description { get; set; }
-        
+
         [Display(Description = "Custom")]
         public string DisplayDescription { get; set; }
-        
+
         public Color Select { get; set; }
-        
+
         public MarketingColor SelectWithDisplayNames { get; set; }
-        
+
         [Wrapper("panel1")]
         [Wrapper("panel2")]
         public string CustomWrapper { get; set; }
-        
+
         public Access FlagsEnumMultiselect { get; set; }
-        
+
         [Multiple(false)]
         public Access FlagsEnumMultiselectOverriden { get; set; }
 
         [IgnoreDataMember]
         public string IgnoreDataMember { get; set; }
-        
+
         [Newtonsoft.Json.JsonIgnore]
         public string NewtonsoftJsonIgnore { get; set; }
-        
+
         [System.Text.Json.Serialization.JsonIgnore]
         public string JsonIgnore { get; set; }
-        
+
         [FieldType("custom")]
         public string FieldType { get; set; }
-        
+
         [InputType("custom")]
         public string InputType { get; set; }
-        
+
         [DataType(DataType.MultilineText)]
         [Rows(6)]
         public string TextAreaRows { get; set; }
-        
+
         [Validators("ip", "ip2")]
         [Validators("ip3")]
         public string CustomValidators { get; set; }
-        
+
         public Marvel Marvel { get; set; }
-        
+
         [AddonRight(Text = "right text", Class = "right class")]
         public string RightAddon { get; set; }
-        
+
         [AddonLeft(Text = "left text", Class = "left class")]
         public string LeftAddon { get; set; }
-        
+
+        [ClassName("custom-class")]
+        public string WithClassName { get; set; }
+
         //public string CustomMessage { get; set; }
     }
 
@@ -736,49 +743,49 @@ namespace FormlySchema.Generation.CSharp.UnitTests
     {
         [DataType(DataType.DateTime)]
         public string DateTime { get; set; }
-        
+
         [DataType(DataType.Date)]
         public string Date { get; set; }
-        
+
         [DataType(DataType.Time)]
         public string Time { get; set; }
-        
+
         [DataType(DataType.Duration)]
         public string Duration { get; set; }
-        
+
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
-        
+
         [DataType(DataType.Currency)]
         public string Currency { get; set; }
-        
+
         [DataType(DataType.Text)]
         public string Text { get; set; }
-        
+
         [DataType(DataType.Html)]
         public string Html { get; set; }
-        
+
         [DataType(DataType.MultilineText)]
         public string MultilineText { get; set; }
-        
+
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
-        
+
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
         [DataType(DataType.Url)]
         public string Url { get; set; }
-        
+
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
-        
+
         [DataType(DataType.CreditCard)]
         public string CreditCard { get; set; }
-        
+
         [DataType(DataType.PostalCode)]
         public string PostalCode { get; set; }
-        
+
         [DataType(DataType.Upload)]
         public string Upload { get; set; }
     }

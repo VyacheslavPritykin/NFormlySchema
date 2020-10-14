@@ -66,13 +66,21 @@ namespace FormlySchema.Generation.CSharp
                 Validation = ResolveValidation(attributes),
                 Validators = ResolveValidators(attributes),
                 Wrappers = ResolveWrappers(attributes),
+                ClassName = ResolveClassName(attributes),
+                FieldGroupClassName = ResolveFieldGroupClassName(attributes),
                 FieldGroup = ResolveFieldGroup(propertyInfo, formlySettings),
                 FieldArray = ResolveFieldArray(propertyInfo, formlySettings),
             };
 
             return formlyFieldConfig;
         }
-        
+
+        private static string? ResolveClassName(Attribute[] attributes) =>
+            attributes.OfType<ClassNameAttribute>().FirstOrDefault()?.ClassName;
+
+        private static string? ResolveFieldGroupClassName(Attribute[] attributes) =>
+            attributes.OfType<FieldGroupClassNameAttribute>().FirstOrDefault()?.ClassName;
+
         private static FormlyFieldConfig BuildFormlyFieldConfigForSimpleArrayElement(Type propertyType)
         {
             var attributes = Array.Empty<Attribute>();
