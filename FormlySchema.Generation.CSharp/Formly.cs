@@ -258,7 +258,7 @@ namespace FormlySchema.Generation.CSharp
                     var value = memberInfo.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName
                                 ?? memberInfo.GetCustomAttribute<DataMemberAttribute>()?.Name
                                 ?? memberInfo.Name;
-                    var group = memberInfo.GetCustomAttribute<GroupAttribute>()?.Name;
+                    var group = memberInfo.GetCustomAttribute<EnumValueGroupAttribute>()?.Name;
                     options.Add(new {label, value, group});
                 }
                 

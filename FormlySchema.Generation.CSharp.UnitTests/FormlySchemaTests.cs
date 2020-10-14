@@ -590,14 +590,15 @@ namespace FormlySchema.Generation.CSharp.UnitTests
 
     enum Marvel
     {
-        [Display(Name = "Iron Man"), Group("Male")]
+        [Display(Name = "Iron Man"), EnumValueGroup("Male")]
         IronMan,
-        [Display(Name = "Captain America"), Group("Male")]
+
+        [Display(Name = "Captain America"), EnumValueGroup("Male")]
         CaptainAmerica,
-        [Display(Name = "Black Widow"), Group("Female")]
+
+        [Display(Name = "Black Widow"), EnumValueGroup("Female")]
         BlackWidow,
-        [Display(Name = "Captain Marvel")]
-        CaptainMarvel
+        [Display(Name = "Captain Marvel")] CaptainMarvel
     }
 
     internal class Foo
