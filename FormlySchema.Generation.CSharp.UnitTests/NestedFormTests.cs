@@ -12,7 +12,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         {
             _testOutputHelper = testOutputHelper;
         }
-        
+
         [Fact]
         public void NestedForms()
         {
@@ -43,19 +43,19 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         }
     }
 
-    class Parent
+    internal class Parent
     {
         [FieldGroupClassName("custom-class")]
         public EmptyChild EmptyChild { get; set; }
-        
+
         public ChildWithData ChildWithData { get; set; }
     }
 
-    class EmptyChild
+    internal class EmptyChild
     {
     }
-    
-    class ChildWithData
+
+    internal class ChildWithData
     {
         public string FirstName { get; set; }
     }

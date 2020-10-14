@@ -16,16 +16,16 @@
         public string? Type { get; set; }
         public bool? Multiple { get; set; }
         public int? Rows { get; set; }
-        
+
         public Addon? AddonLeft { get; set; }
-        
+
         public Addon? AddonRight { get; set; }
     }
 
     public class Addon
     {
         public string? Class { get; set; }
-        
+
         public string? Text { get; set; }
     }
 }

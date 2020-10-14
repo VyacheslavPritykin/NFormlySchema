@@ -14,7 +14,7 @@ namespace FormlySchema.Generation.CSharp
 
         public string Property { get; }
         public string Expression { get; }
-        
+
         public bool IsFunction { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,7 +12,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         {
             _testOutputHelper = testOutputHelper;
         }
-        
+
         [Fact]
         public void Arrays()
         {

@@ -572,17 +572,19 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         Blue
     }
 
-    enum MarketingColor
+    internal enum MarketingColor
     {
-        [Display(Name = "Midnight Green")] [JsonProperty(PropertyName = "GreenColor")]
+        [Display(Name = "Midnight Green")]
+        [JsonProperty(PropertyName = "GreenColor")]
         Green,
 
-        [Display(Name = "Deep Blue")] [DataMember(Name = "BlueColor")]
+        [Display(Name = "Deep Blue")]
+        [DataMember(Name = "BlueColor")]
         Blue
     }
 
     [Flags]
-    enum Access
+    internal enum Access
     {
         None = 0,
         Create = 1,
@@ -592,17 +594,22 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         All = Create | Read | Update | Delete
     }
 
-    enum Marvel
+    internal enum Marvel
     {
-        [Display(Name = "Iron Man"), EnumValueGroup("Male")]
+        [Display(Name = "Iron Man")]
+        [EnumValueGroup("Male")]
         IronMan,
 
-        [Display(Name = "Captain America"), EnumValueGroup("Male")]
+        [Display(Name = "Captain America")]
+        [EnumValueGroup("Male")]
         CaptainAmerica,
 
-        [Display(Name = "Black Widow"), EnumValueGroup("Female")]
+        [Display(Name = "Black Widow")]
+        [EnumValueGroup("Female")]
         BlackWidow,
-        [Display(Name = "Captain Marvel")] CaptainMarvel
+
+        [Display(Name = "Captain Marvel")]
+        CaptainMarvel
     }
 
     internal class Foo
@@ -705,7 +712,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         [IgnoreDataMember]
         public string IgnoreDataMember { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public string NewtonsoftJsonIgnore { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
@@ -739,7 +746,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         //public string CustomMessage { get; set; }
     }
 
-    class VariousInputTypes
+    internal class VariousInputTypes
     {
         [DataType(DataType.DateTime)]
         public string DateTime { get; set; }

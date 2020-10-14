@@ -6,7 +6,7 @@ namespace FormlySchema.Generation.CSharp
     public class FormlyFieldConfigCollection : Collection<FormlyFieldConfig>
     {
         public static readonly FormlyFieldConfigCollection Empty = new FormlyFieldConfigCollection();
-        
+
         public FormlyFieldConfigCollection()
         {
         }

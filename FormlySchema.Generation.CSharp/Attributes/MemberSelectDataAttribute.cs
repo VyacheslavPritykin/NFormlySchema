@@ -9,14 +9,12 @@ namespace FormlySchema.Generation.CSharp
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class MemberSelectDataAttribute : Attribute
     {
-        public MemberSelectDataAttribute(
-            string memberName,
-            params object?[] parameters)
+        public MemberSelectDataAttribute(string memberName, params object?[] parameters)
         {
             MemberName = memberName ?? throw new ArgumentNullException(nameof(memberName));
             Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
         }
-        
+
         public string MemberName { get; }
 
         public Type? MemberType { get; set; }
@@ -24,15 +22,15 @@ namespace FormlySchema.Generation.CSharp
         public object?[]? Parameters { get; }
 
         public string GroupProp { get; set; } = "Group";
-        
+
         public string ValueProp { get; set; } = "Value";
-        
+
         public string LabelProp { get; set; } = "Label";
 
         public IEnumerable<object>? GetData(Type? memberType)
         {
             if (memberType == null) throw new ArgumentNullException(nameof(memberType));
-            
+
             var type = MemberType ?? memberType;
             if (type == null)
                 return null;
@@ -111,8 +109,7 @@ namespace FormlySchema.Generation.CSharp
             return () => propInfo.GetValue(null, null);
         }
 
-        private static bool ParameterTypesCompatible(
-            IReadOnlyList<ParameterInfo>? parameters,
+        private static bool ParameterTypesCompatible(IReadOnlyList<ParameterInfo>? parameters,
             IReadOnlyList<Type?> parameterTypes)
         {
             if (parameters?.Count != parameterTypes.Count)

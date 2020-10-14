@@ -51,7 +51,8 @@ namespace FormlySchema.Generation.CSharp
         }
 
         private static FormlyFieldConfig BuildFormlyFieldConfig(PropertyInfo propertyInfo,
-            FormlySettings formlySettings, Type type)
+            FormlySettings formlySettings,
+            Type type)
         {
             var attributes = Attribute.GetCustomAttributes(propertyInfo);
 
@@ -60,7 +61,8 @@ namespace FormlySchema.Generation.CSharp
                 Key = ResolveKey(propertyInfo.Name, attributes),
                 Type = ResolveFieldType(propertyInfo.PropertyType, attributes),
                 DefaultValue = ResolveDefaultValue(attributes),
-                TemplateOptions = ResolveFormlyTemplateOptions(propertyInfo.PropertyType, attributes, formlySettings, type),
+                TemplateOptions =
+                    ResolveFormlyTemplateOptions(propertyInfo.PropertyType, attributes, formlySettings, type),
                 HideExpression = ResolveHideExpression(attributes),
                 ExpressionProperties = ResolveExpressionProperties(attributes),
                 Validation = ResolveValidation(attributes),
@@ -100,7 +102,7 @@ namespace FormlySchema.Generation.CSharp
             var elementType = propertyInfo.PropertyType.GetElementType()!;
             if (!TypeUtils.IsFormGroup(elementType))
                 return BuildFormlyFieldConfigForSimpleArrayElement(elementType);
-            
+
             return null; // TODO
         }
 
@@ -118,7 +120,7 @@ namespace FormlySchema.Generation.CSharp
             {
                 Validation = ResolveValidatorsValidation(attributes)
             };
-            
+
             return validators.HasData() ? validators : null;
         }
 
@@ -146,7 +148,9 @@ namespace FormlySchema.Generation.CSharp
         }
 
         private static FormlyTemplateOptions? ResolveFormlyTemplateOptions(Type propertyType,
-            Attribute[] attributes, FormlySettings formlySettings, Type type)
+            Attribute[] attributes,
+            FormlySettings formlySettings,
+            Type type)
         {
             var templateOptions = new FormlyTemplateOptions
             {
@@ -177,7 +181,7 @@ namespace FormlySchema.Generation.CSharp
                 .Select(x => new Addon {Class = x.Class, Text = x.Text})
                 .FirstOrDefault();
         }
-        
+
         private static Addon? ResolveAddonRight(Attribute[] attributes)
         {
             return attributes.OfType<AddonRightAttribute>()
@@ -209,7 +213,7 @@ namespace FormlySchema.Generation.CSharp
             var inputType = attributes.OfType<InputTypeAttribute>().FirstOrDefault()?.Type;
             if (inputType != null)
                 return inputType;
-            
+
             var dataTypeAttribute = attributes.OfType<DataTypeAttribute>().FirstOrDefault();
             if (dataTypeAttribute != null)
             {
@@ -269,7 +273,7 @@ namespace FormlySchema.Generation.CSharp
                     var group = memberInfo.GetCustomAttribute<EnumValueGroupAttribute>()?.Name;
                     options.Add(new {label, value, group});
                 }
-                
+
                 return options;
             }
 
@@ -288,7 +292,7 @@ namespace FormlySchema.Generation.CSharp
                     var value = valuePropertyInfo?.GetValue(element);
                     var label = labelPropertyInfo?.GetValue(element);
                     var group = groupPropertyInfo?.GetValue(element);
-                    
+
                     options.Add(new {value, label, group});
                 }
 
@@ -324,7 +328,8 @@ namespace FormlySchema.Generation.CSharp
                 .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage));
 
             var pairsFromValidationMessageAttributes = attributes.OfType<ValidationMessageAttribute>()
-                .Select(attr => new KeyValuePair<string,object>(attr.Name, attr.IsFunction ? (object) new JRaw(attr.MessageExpression) : attr.MessageExpression));
+                .Select(attr => new KeyValuePair<string, object>(attr.Name,
+                    attr.IsFunction ? (object) new JRaw(attr.MessageExpression) : attr.MessageExpression));
 
             var keyValuePairs = pairsFromValidationAttributes.Concat(pairsFromValidationMessageAttributes).ToList();
 
@@ -425,17 +430,17 @@ namespace FormlySchema.Generation.CSharp
             var fieldType = attributes.OfType<FieldTypeAttribute>().FirstOrDefault()?.Type;
             if (fieldType != null)
                 return fieldType;
-            
+
             var dataTypeAttribute = attributes
                 .OfType<DataTypeAttribute>()
-                .FirstOrDefault(); 
+                .FirstOrDefault();
 
             if (dataTypeAttribute != null)
             {
                 fieldType = ResolveFieldTypeFromDataType(dataTypeAttribute);
                 if (fieldType != null) return fieldType;
             }
-            
+
             if (attributes.OfType<MemberSelectDataAttribute>().Any())
                 return KnownFieldTypes.Select;
 
@@ -443,12 +448,12 @@ namespace FormlySchema.Generation.CSharp
 
             if (underlyingType.IsEnum)
                 return KnownFieldTypes.Select;
-            
+
             if (underlyingType == typeof(bool)) return KnownFieldTypes.CheckBox;
 
             if (propertyType.IsCollection())
                 return KnownFieldTypes.Repeat;
-            
+
             return KnownFieldTypes.Input;
         }
 

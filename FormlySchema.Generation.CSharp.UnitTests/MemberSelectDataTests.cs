@@ -82,7 +82,6 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                         }
                     }
                 }
-
             );
         }
     }
@@ -91,17 +90,18 @@ namespace FormlySchema.Generation.CSharp.UnitTests
     {
         [MemberSelectData(nameof(SameTypePropertyData))]
         public string SameTypeProperty { get; set; }
-        
+
         [MemberSelectData(nameof(SameTypeMethodData), 2)]
         public string SameTypeMethod { get; set; }
 
         [MemberSelectData(nameof(OtherTypeData.OtherTypePropertyData), MemberType = typeof(OtherTypeData))]
         public string OtherTypeProperty { get; set; }
-        
+
         [MemberSelectData(nameof(OtherTypeData.OtherTypeMethodData), 2, MemberType = typeof(OtherTypeData))]
         public string OtherTypeMethod { get; set; }
-        
-        [MemberSelectData(nameof(CustomPropertiesData), GroupProp = "CustomGroup", ValueProp = "CustomValue", LabelProp = "CustomLabel")]
+
+        [MemberSelectData(nameof(CustomPropertiesData), GroupProp = "CustomGroup", ValueProp = "CustomValue",
+            LabelProp = "CustomLabel")]
         public string CustomProperties { get; set; }
 
         public static IEnumerable<CustomData> CustomPropertiesData => new[]
@@ -119,7 +119,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                 CustomLabel = "label2",
             }
         };
-    
+
         public static IEnumerable<Data> SameTypePropertyData => new[]
         {
             new Data {Label = "label1", Value = "value1", Group = "group1"},
@@ -139,9 +139,9 @@ namespace FormlySchema.Generation.CSharp.UnitTests
     public class CustomData
     {
         public string CustomGroup { get; set; }
-        
+
         public string CustomValue { get; set; }
-        
+
         public string CustomLabel { get; set; }
     }
 

@@ -11,10 +11,9 @@ namespace FormlySchema.Generation.CSharp
         public ExpressionPropertyDictionary(IDictionary<string, object> dictionary) : base(dictionary)
         {
         }
-        
+
         public ExpressionPropertyDictionary(IEnumerable<KeyValuePair<string, object>> list) : base(list)
         {
         }
     }
-
 }
