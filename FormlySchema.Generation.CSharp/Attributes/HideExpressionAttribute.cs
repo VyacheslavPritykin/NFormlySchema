@@ -2,7 +2,7 @@
 
 namespace FormlySchema.Generation.CSharp
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class HideExpressionAttribute : Attribute
     {
         public HideExpressionAttribute(string expression)

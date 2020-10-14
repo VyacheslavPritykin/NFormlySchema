@@ -2,7 +2,7 @@
 
 namespace FormlySchema.Generation.CSharp
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class AddonLeftAttribute : Attribute
     {
         public string? Text { get; set; }

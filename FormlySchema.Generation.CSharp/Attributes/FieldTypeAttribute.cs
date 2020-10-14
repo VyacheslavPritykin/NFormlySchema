@@ -2,7 +2,7 @@
 
 namespace FormlySchema.Generation.CSharp
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class FieldTypeAttribute : Attribute
     {
         public string Type { get; }
