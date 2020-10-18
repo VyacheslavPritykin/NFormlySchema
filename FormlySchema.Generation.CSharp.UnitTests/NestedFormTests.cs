@@ -20,6 +20,7 @@ namespace FormlySchema.Generation.CSharp.UnitTests
             var schema = Formly.Generate<Parent>();
 
             // assert
+            _testOutputHelper.WriteLine(schema.ToJson());
             schema.Should().BeEquivalentTo(
                 new FormlyFieldConfig
                 {
@@ -38,17 +39,48 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                             Type = "input"
                         }
                     }
+                },
+                new FormlyFieldConfig
+                {
+                    Key = $"{nameof(Parent.InlineChildWithData)}.{nameof(Parent.InlineChildWithData.ZipCode)}",
+                    Type = "input"
+                },
+                new FormlyFieldConfig
+                {
+                    Key = $"{nameof(InlineChildWithNestedData)}.{nameof(InlineChildWithNestedData.Data)}",
+                    Type = "input"
+                },
+                new FormlyFieldConfig
+                {
+                    Key = $"{nameof(InlineChildWithNestedData)}.{nameof(InlineChildWithNestedData.InlineChildWithData)}.{nameof(InlineChildWithNestedData.InlineChildWithData.ZipCode)}",
+                    Type = "input"
                 });
-            _testOutputHelper.WriteLine(schema.ToJson());
         }
     }
 
     internal class Parent
     {
-        [FieldGroupClassName("custom-class")]
+        [FieldGroup(ClassName = "custom-class")]
         public EmptyChild EmptyChild { get; set; }
 
+        [FieldGroup]
         public ChildWithData ChildWithData { get; set; }
+
+        public InlineChildWithData InlineChildWithData { get; set; }
+
+        public InlineChildWithNestedData InlineChildWithNestedData { get; set; }
+    }
+
+    internal class InlineChildWithData
+    {
+        public string ZipCode { get; set; }
+    }
+
+    internal class InlineChildWithNestedData
+    {
+        public string Data { get; set; }
+
+        public InlineChildWithData InlineChildWithData { get; set; }
     }
 
     internal class EmptyChild

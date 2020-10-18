@@ -14,8 +14,8 @@ namespace FormlySchema.Generation.CSharp
 {
     public class Formly
     {
-        private static readonly ConcurrentDictionary<Type, FormlyFieldConfigCollection> Cache =
-            new ConcurrentDictionary<Type, FormlyFieldConfigCollection>();
+        private static readonly ConcurrentDictionary<CacheKey, FormlyFieldConfigCollection> Cache =
+            new ConcurrentDictionary<CacheKey, FormlyFieldConfigCollection>();
 
         private static readonly FormlySettings DefaultFormlySettings = new FormlySettings
         {
@@ -28,37 +28,57 @@ namespace FormlySchema.Generation.CSharp
         public static FormlyFieldConfigCollection Generate<T>(FormlySettings setting) =>
             Generate(typeof(T), setting);
 
-        public static FormlyFieldConfigCollection Generate(Type type, FormlySettings setting)
+        public static FormlyFieldConfigCollection Generate(Type type, FormlySettings setting) =>
+            Generate(type, setting, null);
+
+        private static FormlyFieldConfigCollection Generate(Type type, FormlySettings setting, string? parentKey)
         {
             setting.InputTypeResolver ??= DefaultInputTypeResolver;
 
-            if (Cache.TryGetValue(type, out FormlyFieldConfigCollection result))
+            if (Cache.TryGetValue(new CacheKey(type, parentKey), out FormlyFieldConfigCollection result))
                 return result;
 
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
             var formlyFieldConfigs = new FormlyFieldConfigCollection(type.GetProperties(bindingFlags)
-                .Select(info => new {info, Attributes = Attribute.GetCustomAttributes(info)})
+                .Select(propertyInfo => new
+                    {PropertyInfo = propertyInfo, Attributes = Attribute.GetCustomAttributes(propertyInfo)})
                 .Where(x => !x.Attributes.Any(attr =>
                     attr is IgnoreDataMemberAttribute
                     || attr is JsonIgnoreAttribute
                     || attr is System.Text.Json.Serialization.JsonIgnoreAttribute))
-                .Select(x => BuildFormlyFieldConfig(x.info, setting, type))
+                .SelectMany(x =>
+                {
+                    IEnumerable<FormlyFieldConfig> fieldConfigs;
+                    if (IsInlineNestedFieldGroup(x.PropertyInfo, x.Attributes))
+                    {
+                        var key = ResolveKey(parentKey, x.PropertyInfo.Name, x.Attributes);
+                        fieldConfigs = Generate(x.PropertyInfo.PropertyType, setting, key);
+                        return fieldConfigs;
+                    }
+
+                    fieldConfigs = new[]
+                    {
+                        BuildFormlyFieldConfig(x.PropertyInfo, x.Attributes, setting, type, parentKey)
+                    };
+
+                    return fieldConfigs;
+                })
                 .ToList());
 
-            Cache.TryAdd(type, formlyFieldConfigs);
+            Cache.TryAdd(new CacheKey(type, parentKey), formlyFieldConfigs);
 
             return formlyFieldConfigs;
         }
 
         private static FormlyFieldConfig BuildFormlyFieldConfig(PropertyInfo propertyInfo,
+            Attribute[] attributes,
             FormlySettings formlySettings,
-            Type type)
+            Type type,
+            string? parentKey)
         {
-            var attributes = Attribute.GetCustomAttributes(propertyInfo);
-
             var formlyFieldConfig = new FormlyFieldConfig
             {
-                Key = ResolveKey(propertyInfo.Name, attributes),
+                Key = ResolveKey(parentKey, propertyInfo.Name, attributes),
                 Type = ResolveFieldType(propertyInfo.PropertyType, attributes),
                 DefaultValue = ResolveDefaultValue(attributes),
                 TemplateOptions =
@@ -71,7 +91,7 @@ namespace FormlySchema.Generation.CSharp
                 Wrappers = ResolveWrappers(attributes),
                 ClassName = ResolveClassName(attributes),
                 FieldGroupClassName = ResolveFieldGroupClassName(attributes),
-                FieldGroup = ResolveFieldGroup(propertyInfo, formlySettings),
+                FieldGroup = ResolveFieldGroup(propertyInfo, attributes, formlySettings),
                 FieldArray = ResolveFieldArray(propertyInfo, formlySettings),
             };
 
@@ -82,7 +102,7 @@ namespace FormlySchema.Generation.CSharp
             attributes.OfType<ClassNameAttribute>().FirstOrDefault()?.ClassName;
 
         private static string? ResolveFieldGroupClassName(Attribute[] attributes) =>
-            attributes.OfType<FieldGroupClassNameAttribute>().FirstOrDefault()?.ClassName;
+            attributes.OfType<FieldGroupAttribute>().FirstOrDefault()?.ClassName;
 
         private static FormlyFieldConfig BuildFormlyFieldConfigForSimpleArrayElement(Type propertyType)
         {
@@ -108,12 +128,20 @@ namespace FormlySchema.Generation.CSharp
         }
 
         private static FormlyFieldConfigCollection? ResolveFieldGroup(PropertyInfo propertyInfo,
+            Attribute[] attributes,
             FormlySettings formlySettings)
         {
-            return TypeUtils.IsFormGroup(propertyInfo.PropertyType) && !propertyInfo.PropertyType.IsCollection()
+            return TypeUtils.IsFormGroup(propertyInfo.PropertyType)
+                   && !propertyInfo.PropertyType.IsCollection()
+                   && attributes.OfType<FieldGroupAttribute>().Any()
                 ? Generate(propertyInfo.PropertyType, formlySettings)
                 : null;
         }
+
+        private static bool IsInlineNestedFieldGroup(PropertyInfo propertyInfo, Attribute[] attributes) =>
+            TypeUtils.IsFormGroup(propertyInfo.PropertyType)
+            && !propertyInfo.PropertyType.IsCollection()
+            && !attributes.OfType<FieldGroupAttribute>().Any();
 
         private static Validators? ResolveValidators(Attribute[] attributes)
         {
@@ -413,15 +441,21 @@ namespace FormlySchema.Generation.CSharp
             return null;
         }
 
-        private static string? ResolveKey(string propertyName, Attribute[] attributes)
+        private static string? ResolveKey(string? parentKey, string propertyName, Attribute[] attributes)
         {
+            string key;
             var dataMemberAttribute = attributes.OfType<DataMemberAttribute>().FirstOrDefault();
-            if (dataMemberAttribute?.Name != null) return dataMemberAttribute.Name;
+            if (dataMemberAttribute?.Name != null)
+            {
+                key = dataMemberAttribute.Name;
+            }
+            else
+            {
+                var jsonPropertyAttribute = attributes.OfType<JsonPropertyAttribute>().FirstOrDefault();
+                key = jsonPropertyAttribute?.PropertyName ?? propertyName;
+            }
 
-            var jsonPropertyAttribute = attributes.OfType<JsonPropertyAttribute>().FirstOrDefault();
-            if (jsonPropertyAttribute?.PropertyName != null) return jsonPropertyAttribute.PropertyName;
-
-            return propertyName;
+            return string.IsNullOrEmpty(parentKey) ? key : $"{parentKey}.{key}";
         }
 
         private static string? ResolveLabel(Attribute[] attributes)
@@ -493,5 +527,29 @@ namespace FormlySchema.Generation.CSharp
                 DataType.Upload => KnownFieldTypes.File,
                 _ => null
             };
+
+        private sealed class CacheKey
+        {
+            public CacheKey(Type type, string? parentKey)
+            {
+                Type = type;
+                ParentKey = parentKey;
+            }
+
+            public Type Type { get; }
+            public string? ParentKey { get; }
+
+            private bool Equals(CacheKey other)
+            {
+                return Type == other.Type && ParentKey == other.ParentKey;
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return ReferenceEquals(this, obj) || obj is CacheKey other && Equals(other);
+            }
+
+            public override int GetHashCode() => HashCode.Combine(Type, ParentKey);
+        }
     }
 }
