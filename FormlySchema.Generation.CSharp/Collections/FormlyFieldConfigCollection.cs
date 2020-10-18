@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace FormlySchema.Generation.CSharp
 {
@@ -15,6 +16,7 @@ namespace FormlySchema.Generation.CSharp
         {
         }
 
-        public string ToJson() => this.SerializeToJson();
+        public string ToJson(Formatting formatting = Formatting.Indented) =>
+            this.SerializeToJson(formatting);
     }
 }

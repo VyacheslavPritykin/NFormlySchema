@@ -67,6 +67,7 @@ namespace FormlySchema.Generation.CSharp
                 ExpressionProperties = ResolveExpressionProperties(attributes),
                 Validation = ResolveValidation(attributes),
                 Validators = ResolveValidators(attributes),
+                AsyncValidators = ResolveAsyncValidators(attributes),
                 Wrappers = ResolveWrappers(attributes),
                 ClassName = ResolveClassName(attributes),
                 FieldGroupClassName = ResolveFieldGroupClassName(attributes),
@@ -118,15 +119,28 @@ namespace FormlySchema.Generation.CSharp
         {
             var validators = new Validators
             {
-                Validation = ResolveValidatorsValidation(attributes)
+                Validation = ResolveValidatorsValidation(attributes, false)
             };
 
             return validators.HasData() ? validators : null;
         }
 
-        private static ValidatorsValidationCollection? ResolveValidatorsValidation(Attribute[] attributes)
+        private static Validators? ResolveAsyncValidators(Attribute[] attributes)
         {
-            var validators = attributes.OfType<ValidatorsAttribute>().SelectMany(x => x.Validators).ToList();
+            var validators = new Validators
+            {
+                Validation = ResolveValidatorsValidation(attributes, true)
+            };
+
+            return validators.HasData() ? validators : null;
+        }
+
+        private static ValidatorsValidationCollection? ResolveValidatorsValidation(Attribute[] attributes, bool isAsync)
+        {
+            var validators = attributes.OfType<ValidatorsAttribute>()
+                .Where(x => x.IsAsync == isAsync)
+                .SelectMany(x => x.IsFunction ? x.Validators.Select(v => (object) new JRaw(v)) : x.Validators)
+                .ToList();
             return validators.Any() ? new ValidatorsValidationCollection(validators) : null;
         }
 

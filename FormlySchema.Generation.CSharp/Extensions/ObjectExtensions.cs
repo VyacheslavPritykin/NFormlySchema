@@ -8,12 +8,12 @@ namespace FormlySchema.Generation.CSharp
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
         };
 
         public static string SerializeToJson(this object instance, Formatting formatting = Formatting.Indented)
         {
-            return JsonConvert.SerializeObject(instance, formatting, (JsonSerializerSettings?) JsonSerializerSettings);
+            return JsonConvert.SerializeObject(instance, formatting, JsonSerializerSettings);
         }
 
         public static bool HasData(this object instance)

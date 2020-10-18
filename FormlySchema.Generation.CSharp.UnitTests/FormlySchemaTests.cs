@@ -351,7 +351,8 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                     {
                         Rows = 6
                     }
-                }, new FormlyFieldConfig
+                },
+                new FormlyFieldConfig
                 {
                     Key = nameof(Foo.CustomValidators),
                     Type = "input",
@@ -360,6 +361,44 @@ namespace FormlySchema.Generation.CSharp.UnitTests
                         Validation = new ValidatorsValidationCollection
                         {
                             "ip", "ip2", "ip3"
+                        }
+                    }
+                },
+                new FormlyFieldConfig
+                {
+                    Key = nameof(Foo.CustomAsyncValidators),
+                    Type = "input",
+                    AsyncValidators = new Validators
+                    {
+                        Validation = new ValidatorsValidationCollection
+                        {
+                            "ipAsync", "ip2Async"
+                        }
+                    },
+                    Validators = new Validators
+                    {
+                        Validation = new ValidatorsValidationCollection
+                        {
+                            "ip3"
+                        }
+                    }
+                },
+                new FormlyFieldConfig
+                {
+                    Key = nameof(Foo.CustomFunctionValidators),
+                    Type = "input",
+                    AsyncValidators = new Validators
+                    {
+                        Validation = new ValidatorsValidationCollection
+                        {
+                            new JRaw("ipAsync"), new JRaw("ip2Async")
+                        }
+                    },
+                    Validators = new Validators
+                    {
+                        Validation = new ValidatorsValidationCollection
+                        {
+                            new JRaw("ip3"),
                         }
                     }
                 },
@@ -731,6 +770,14 @@ namespace FormlySchema.Generation.CSharp.UnitTests
         [Validators("ip", "ip2")]
         [Validators("ip3")]
         public string CustomValidators { get; set; }
+
+        [Validators("ipAsync", "ip2Async", IsAsync = true)]
+        [Validators("ip3")]
+        public string CustomAsyncValidators { get; set; }
+
+        [Validators("Ip1", "Ip2", IsAsync = true, IsFunction = true)]
+        [Validators("Ip3", IsFunction = true)]
+        public string CustomFunctionValidators { get; set; }
 
         public Marvel Marvel { get; set; }
 

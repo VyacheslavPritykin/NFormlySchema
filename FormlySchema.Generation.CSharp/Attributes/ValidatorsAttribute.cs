@@ -11,5 +11,9 @@ namespace FormlySchema.Generation.CSharp
         }
 
         public string[] Validators { get; }
+
+        public bool IsAsync { get; set; }
+
+        public bool IsFunction { get; set; }
     }
 }

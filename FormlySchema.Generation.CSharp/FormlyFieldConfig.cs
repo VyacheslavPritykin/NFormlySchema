@@ -13,6 +13,7 @@ namespace FormlySchema.Generation.CSharp
         public Validation? Validation { get; set; }
         public WrapperCollection? Wrappers { get; set; }
         public Validators? Validators { get; set; }
+        public Validators? AsyncValidators { get; set; }
         public string? FieldGroupClassName { get; set; }
         public FormlyFieldConfigCollection? FieldGroup { get; set; }
         public FormlyFieldConfig? FieldArray { get; set; }

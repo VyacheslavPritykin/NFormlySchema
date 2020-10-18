@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 
 namespace FormlySchema.Generation.CSharp
 {
-    public class ValidatorsValidationCollection : Collection<string>
+    public class ValidatorsValidationCollection : Collection<object>
     {
         public ValidatorsValidationCollection()
         {
         }
 
-        public ValidatorsValidationCollection(IList<string> list) : base(list)
+        public ValidatorsValidationCollection(IList<object> list) : base(list)
         {
         }
     }
