@@ -42,11 +42,12 @@ namespace NFormlySchema
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
             var formlyFieldConfigs = new FormlyFieldConfigCollection(type.GetProperties(bindingFlags)
                 .Select(propertyInfo => new
-                    {PropertyInfo = propertyInfo, Attributes = Attribute.GetCustomAttributes(propertyInfo)})
-                .Where(x => !x.Attributes.Any(attr =>
-                    attr is IgnoreDataMemberAttribute
-                    || attr is JsonIgnoreAttribute
-                    || attr is System.Text.Json.Serialization.JsonIgnoreAttribute))
+                    {
+                        PropertyInfo = propertyInfo,
+                        Attributes = Attribute.GetCustomAttributes(propertyInfo)
+                    })
+                .Where(x => !x.Attributes.Any(IsIgnoreAttribute))
+                .OrderBy(x => ResolveOrder(x.Attributes))
                 .SelectMany(x =>
                 {
                     IEnumerable<FormlyFieldConfig> fieldConfigs;
@@ -70,6 +71,14 @@ namespace NFormlySchema
 
             return formlyFieldConfigs;
         }
+
+        private static bool IsIgnoreAttribute(Attribute attr) => attr is IgnoreDataMemberAttribute ||
+                                                                 attr is JsonIgnoreAttribute ||
+                                                                 attr is System.Text.Json.Serialization
+                                                                     .JsonIgnoreAttribute;
+
+        private static int ResolveOrder(Attribute[] attributes) =>
+            attributes.OfType<DisplayAttribute>().FirstOrDefault()?.GetOrder() ?? 10000;
 
         private static FormlyFieldConfig BuildFormlyFieldConfig(PropertyInfo propertyInfo,
             Attribute[] attributes,
@@ -540,15 +549,9 @@ namespace NFormlySchema
             public Type Type { get; }
             public string? ParentKey { get; }
 
-            private bool Equals(CacheKey other)
-            {
-                return Type == other.Type && ParentKey == other.ParentKey;
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return ReferenceEquals(this, obj) || obj is CacheKey other && Equals(other);
-            }
+            private bool Equals(CacheKey other) => Type == other.Type && ParentKey == other.ParentKey;
+            public override bool Equals(object? obj) =>
+                ReferenceEquals(this, obj) || obj is CacheKey other && Equals(other);
 
             public override int GetHashCode() => HashCode.Combine(Type, ParentKey);
         }
