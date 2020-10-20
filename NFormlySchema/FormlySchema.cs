@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NFormlySchema.Generation;
 using NFormlySchema.Internal;
 
 namespace NFormlySchema

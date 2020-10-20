@@ -1,4 +1,4 @@
-﻿namespace NFormlySchema
+﻿namespace NFormlySchema.Generation
 {
     public class FormlyTemplateOptions
     {

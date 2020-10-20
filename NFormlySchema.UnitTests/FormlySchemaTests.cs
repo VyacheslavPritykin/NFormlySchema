@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NFormlySchema.Generation;
 using Xunit;
 using Xunit.Abstractions;
 

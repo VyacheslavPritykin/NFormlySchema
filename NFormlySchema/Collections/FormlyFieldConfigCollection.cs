@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using NFormlySchema.Generation;
 
 namespace NFormlySchema
 {

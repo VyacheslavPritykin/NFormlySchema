@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace NFormlySchema
@@ -12,7 +13,7 @@ namespace NFormlySchema
         };
 
         public static string SerializeToJson(this object instance, Formatting formatting = Formatting.Indented)
-        {
+        { 
             return JsonConvert.SerializeObject(instance, formatting, JsonSerializerSettings);
         }
 

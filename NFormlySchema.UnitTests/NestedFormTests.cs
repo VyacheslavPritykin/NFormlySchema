@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using NFormlySchema.Generation;
 using Xunit;
 using Xunit.Abstractions;
 

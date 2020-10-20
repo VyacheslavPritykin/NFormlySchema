@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using NFormlySchema.Generation;
 using Xunit;
 
 namespace NFormlySchema.UnitTests
