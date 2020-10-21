@@ -238,7 +238,7 @@ Messages:
 ##### FieldArray
 Only `ICollection` of simple types is supported for now.
 
-### Field order
+## Field order
 The `GetProperties` method does not guarantee that it will return properties in declaration order, so you can
 use the `System.ComponentModel.DataAnnotations.DisplayAttribute: Order` to explicitly specify the order.
 > When an order is not specified, NFormlySchema assumes that it is 10000.
