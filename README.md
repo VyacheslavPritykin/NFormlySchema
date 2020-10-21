@@ -67,7 +67,7 @@ public class NestedType
 }
 ```
    
-## Type to Formly Schema mapping
+## .NET type to Formly Schema mapping
 ##### Key
 - `System.Runtime.Serialization.DataMemberAttribute: Name`
 - `Newtonsoft.Json.JsonPropertyAttribute: PropertyName`
@@ -236,3 +236,10 @@ Messages:
 
 ##### FieldArray
 Only `ICollection` of simple types is supported for now.
+
+### Field order
+The `GetProperties` method does not guarantee that it will return properties in declaration order, so you can
+use the `System.ComponentModel.DataAnnotations.DisplayAttribute: Order` to explicitly specify the order.
+> When an order is not specified, NFormlySchema assumes that it is 10000.
+> This value allows for explicitly-ordered fields to be displayed before 
+> and after the fields that don't specify an order.
