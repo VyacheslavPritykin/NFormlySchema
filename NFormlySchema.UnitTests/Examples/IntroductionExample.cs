@@ -117,7 +117,7 @@ namespace NFormlySchema.UnitTests.Examples
         [Display(Name = "Why Not?", Prompt = "Type in here... I dare you")]
         [HideExpression("model.awesome")]
         [ExpressionProperty("templateOptions.placeholder", WhyNotPlaceholderExpression, IsFunction = true)]
-        [ExpressionProperty("templateOptions.disabled", @"formState.awesomeIsForced")]
+        [ExpressionProperty("templateOptions.disabled", "formState.awesomeIsForced")]
         public string WhyNot { get; set; }
 
         [FieldType("custom")]
@@ -131,7 +131,8 @@ namespace NFormlySchema.UnitTests.Examples
         formState.awesomeIsForced ? 'And look! This field magically got focus!' : null";
 
         [DataType(DataType.MultilineText)]
-        [Display(Name = "Some sweet story", Prompt = "It allows you to build and maintain your forms with the ease of JavaScript :-)")]
+        [Display(Name = "Some sweet story",
+            Prompt = "It allows you to build and maintain your forms with the ease of JavaScript :-)")]
         [ExpressionProperty("focus", "formState.awesomeIsForced")]
         [ExpressionProperty("templateOptions.description", StoryDescriptionExpression, IsFunction = true)]
         public string Story { get; set; }

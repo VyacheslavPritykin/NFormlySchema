@@ -227,19 +227,15 @@ namespace NFormlySchema
             return templateOptions.HasData() ? templateOptions : null;
         }
 
-        private static Addon? ResolveAddonLeft(Attribute[] attributes)
-        {
-            return attributes.OfType<AddonLeftAttribute>()
+        private static Addon? ResolveAddonLeft(Attribute[] attributes) =>
+            attributes.OfType<AddonLeftAttribute>()
                 .Select(x => new Addon {Class = x.Class, Text = x.Text})
                 .FirstOrDefault();
-        }
 
-        private static Addon? ResolveAddonRight(Attribute[] attributes)
-        {
-            return attributes.OfType<AddonRightAttribute>()
+        private static Addon? ResolveAddonRight(Attribute[] attributes) =>
+            attributes.OfType<AddonRightAttribute>()
                 .Select(x => new Addon {Class = x.Class, Text = x.Text})
                 .FirstOrDefault();
-        }
 
         private static int? ResolveRows(Attribute[] attributes) =>
             attributes.OfType<RowsAttribute>().FirstOrDefault()?.Count;
@@ -378,7 +374,7 @@ namespace NFormlySchema
                 .Select(attr => new {ValidationName = ResolveValidationName(attr), attr.ErrorMessage})
                 .Where(x => x.ValidationName != null && !string.IsNullOrEmpty(x.ErrorMessage))
                 .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage));
-
+            
             var pairsFromValidationMessageAttributes = attributes.OfType<ValidationMessageAttribute>()
                 .Select(attr => new KeyValuePair<string, object>(attr.Name,
                     attr.IsFunction ? (object) new JRaw(attr.MessageExpression) : attr.MessageExpression));
