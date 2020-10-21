@@ -2,6 +2,7 @@ NFormlySchema for .NET
 =
 
 ![build](https://github.com/VyacheslavPritykin/FormlySchema.Generation.CSharp/workflows/build/badge.svg)
+[![Nuget](https://img.shields.io/nuget/v/NFormlySchema)](https://www.nuget.org/packages/NFormlySchema)
 
 NFormlySchema is a .NET library for the Formly Schema generation. 
 
