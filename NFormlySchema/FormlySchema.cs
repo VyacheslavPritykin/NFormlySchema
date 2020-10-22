@@ -29,6 +29,9 @@ namespace NFormlySchema
         public static FormlyFieldConfigCollection FromType<T>(FormlyGenerationSettings setting) =>
             FromType(typeof(T), setting);
 
+        public static FormlyFieldConfigCollection FromType(Type type) =>
+            FromType(type, DefaultFormlyGenerationSettings);
+        
         public static FormlyFieldConfigCollection FromType(Type type, FormlyGenerationSettings setting) =>
             FromType(type, setting, null);
 
