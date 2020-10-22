@@ -130,7 +130,7 @@ namespace NFormlySchema
                 return null;
 
             var elementType = propertyInfo.PropertyType.GetElementType()!;
-            if (!TypeUtils.IsFormGroup(elementType))
+            if (elementType.IsSimple())
                 return BuildFormlyFieldConfigForSimpleArrayElement(elementType);
 
             return null; // TODO
@@ -140,7 +140,7 @@ namespace NFormlySchema
             Attribute[] attributes,
             FormlyGenerationSettings setting)
         {
-            return TypeUtils.IsFormGroup(propertyInfo.PropertyType)
+            return !propertyInfo.PropertyType.IsSimple()
                    && !propertyInfo.PropertyType.IsCollection()
                    && attributes.OfType<FieldGroupAttribute>().Any()
                 ? FromType(propertyInfo.PropertyType, setting)
@@ -148,7 +148,7 @@ namespace NFormlySchema
         }
 
         private static bool IsInlineNestedFieldGroup(PropertyInfo propertyInfo, Attribute[] attributes) =>
-            TypeUtils.IsFormGroup(propertyInfo.PropertyType)
+            !propertyInfo.PropertyType.IsSimple()
             && !propertyInfo.PropertyType.IsCollection()
             && !attributes.OfType<FieldGroupAttribute>().Any();
 
@@ -427,7 +427,7 @@ namespace NFormlySchema
 
         private static string? ResolveFieldType(Type propertyType, Attribute[] attributes)
         {
-            if (TypeUtils.IsFormGroup(propertyType))
+            if (!propertyType.IsSimple() && !propertyType.IsCollection())
                 return null;
 
             var fieldType = attributes.OfType<FieldTypeAttribute>().FirstOrDefault()?.Type;

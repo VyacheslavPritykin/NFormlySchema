@@ -10,41 +10,40 @@ namespace NFormlySchema.UnitTests
     public class UtilsTests
     {
         [Theory]
-        [InlineData(typeof(int), false)]
-        [InlineData(typeof(DateTime), false)]
-        [InlineData(typeof(DateTimeOffset), false)]
-        [InlineData(typeof(TestEnum), false)]
-        [InlineData(typeof(string), false)]
-        [InlineData(typeof(Guid), false)]
-        [InlineData(typeof(TestClass), true)]
-        [InlineData(typeof(TestStruct), true)]
-        [InlineData(typeof(object), true)]
-        [InlineData(typeof(Collection<string>), false)]
-        [InlineData(typeof(List<string>), false)]
-        [InlineData(typeof(string[]), false)]
-        public void IsFormGroup(Type type, bool expectedResult)
+        [InlineData(typeof(int), true)]
+        [InlineData(typeof(DateTime), true)]
+        [InlineData(typeof(DateTimeOffset), true)]
+        [InlineData(typeof(TestEnum), true)]
+        [InlineData(typeof(string), true)]
+        [InlineData(typeof(Guid), true)]
+        [InlineData(typeof(TimeSpan), true)]
+        [InlineData(typeof(TestClass), false)]
+        [InlineData(typeof(TestStruct), false)]
+        [InlineData(typeof(object), false)]
+        public void IsSimple(Type type, bool expectedResult)
         {
             // act
-            var isFormGroup = TypeUtils.IsFormGroup(type);
+            var isSimple = type.IsSimple();
 
             // assert
-            isFormGroup.Should().Be(expectedResult);
+            isSimple.Should().Be(expectedResult);
         }
 
         [Theory]
-        [InlineData(typeof(int?), false)]
-        [InlineData(typeof(DateTime?), false)]
-        [InlineData(typeof(DateTimeOffset?), false)]
-        [InlineData(typeof(TestEnum?), false)]
-        [InlineData(typeof(Guid?), false)]
-        [InlineData(typeof(TestStruct?), true)]
-        public void IsFormGroupWithNullableTypes(Type type, bool expectedResult)
+        [InlineData(typeof(int?), true)]
+        [InlineData(typeof(DateTime?), true)]
+        [InlineData(typeof(DateTimeOffset?), true)]
+        [InlineData(typeof(TimeSpan?), true)]
+        [InlineData(typeof(TestEnum?), true)]
+        [InlineData(typeof(Guid?), true)]
+        [InlineData(typeof(TestStruct?), false)]
+        public void IsSimpleWithNullableTypes(Type type, bool expectedResult)
         {
             // act
-            var isFormGroup = TypeUtils.IsFormGroup(type);
+            var isSimple = type.IsSimple();
 
             // assert
-            isFormGroup.Should().Be(expectedResult);
+            isSimple.Should().Be(expectedResult);
         }
     }
 
