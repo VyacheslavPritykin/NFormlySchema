@@ -12,12 +12,12 @@ Formly Schema is used by the ngx-formly (https://formly.dev) project which is a 
 Documentation: https://github.com/VyacheslavPritykin/NFormlySchema#readme</Description>
         <RepositoryUrl>https://github.com/VyacheslavPritykin/NFormlySchema</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>- Add a new method overload: FormlySchema.FromType(Type type)
-- Make the DefaultInputTypeResolver method public in the new dedicated FormlySchemaDefaults class and initialize the FormlyGeneratorSettings.InputTypeResolver with the default resolver.</PackageReleaseNotes>
+        <PackageReleaseNotes>fixes:
+ - Treat TimeSpan as a simple type</PackageReleaseNotes>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.0</AssemblyVersion>
-        <FileVersion>1.1.0</FileVersion>
-        <PackageVersion>1.1.0</PackageVersion>
+        <FileVersion>1.1.1</FileVersion>
+        <PackageVersion>1.1.1</PackageVersion>
         <PackageTags>formly schema .net generator generation</PackageTags>
         <Copyright>Copyright © Vyacheslav Pritykin, 2020</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
