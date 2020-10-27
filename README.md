@@ -129,7 +129,7 @@ public class NestedType
   ##### MinLength
   `System.ComponentModel.DataAnnotations.MinLengthAttribute: Length`
   
-  ##### ManLength
+  ##### MaxLength
   `System.ComponentModel.DataAnnotations.MaxLengthAttribute: Length`
   
   ##### Pattern
@@ -154,7 +154,7 @@ public class NestedType
   
   For other simple types:
   `NFormlySchema.MemberSelectDataAttribute`. The majority of its code was kindly taken from the
-  `Xunit.MemberDataAttribute` and you may expect similar API. The attribute provides a data
+  `Xunit.MemberDataAttribute` and you may expect a similar API. The attribute provides a data
   source for "select" fields,  with the data coming from one of the following sources:
    1. A static property
    2. A static field
@@ -230,7 +230,7 @@ Messages:
 ##### FieldGroup
 `NFormlySchema.FieldGroupAttribute` over a complex property type.
 > If FieldGroupAttribute is not set over the complex property type, then the
-> generated Formly Schema is flat and nested properties are represented by complex
+> generated Formly Schema is flat, and nested properties are represented by complex
 > keys like: "RootProperty.SubRootProperty.ChildProperty
 
 ##### FieldGroupClassName
