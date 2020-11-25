@@ -29,22 +29,24 @@ namespace NFormlySchema
 
         public static FormlyFieldConfigCollection FromType(Type type) =>
             FromType(type, DefaultFormlyGenerationSettings);
-        
+
         public static FormlyFieldConfigCollection FromType(Type type, FormlyGenerationSettings setting) =>
             FromType(type, setting, null);
 
-        private static FormlyFieldConfigCollection FromType(Type type, FormlyGenerationSettings setting, string? parentKey)
+        private static FormlyFieldConfigCollection FromType(Type type,
+            FormlyGenerationSettings setting,
+            string? parentKey)
         {
             if (Cache.TryGetValue(new CacheKey(type, parentKey), out FormlyFieldConfigCollection result))
                 return result;
-
+            
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
-            var formlyFieldConfigs = new FormlyFieldConfigCollection(type.GetProperties(bindingFlags)
+            result = new FormlyFieldConfigCollection(type.GetProperties(bindingFlags)
                 .Select(propertyInfo => new
-                    {
-                        PropertyInfo = propertyInfo,
-                        Attributes = Attribute.GetCustomAttributes(propertyInfo)
-                    })
+                {
+                    PropertyInfo = propertyInfo,
+                    Attributes = Attribute.GetCustomAttributes(propertyInfo)
+                })
                 .Where(x => !x.Attributes.Any(IsIgnoreAttribute))
                 .OrderBy(x => ResolveOrder(x.Attributes))
                 .SelectMany(x =>
@@ -66,9 +68,23 @@ namespace NFormlySchema
                 })
                 .ToList());
 
-            Cache.TryAdd(new CacheKey(type, parentKey), formlyFieldConfigs);
+            var typeCustomAttributes = type.GetCustomAttributes();
+            var fieldTypeAttribute = typeCustomAttributes.OfType<FieldTypeAttribute>().FirstOrDefault();
+            if (fieldTypeAttribute != null)
+            {
+                result = new FormlyFieldConfigCollection
+                {
+                    new FormlyFieldConfig
+                    {
+                        Type = fieldTypeAttribute.Type,
+                        FieldGroup = result
+                    }
+                };
+            }
+            
+            Cache.TryAdd(new CacheKey(type, parentKey), result);
 
-            return formlyFieldConfigs;
+            return result;
         }
 
         private static bool IsIgnoreAttribute(Attribute attr) => attr is IgnoreDataMemberAttribute ||
@@ -323,7 +339,7 @@ namespace NFormlySchema
                 .Select(attr => new {ValidationName = ResolveValidationName(attr), attr.ErrorMessage})
                 .Where(x => x.ValidationName != null && !string.IsNullOrEmpty(x.ErrorMessage))
                 .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage));
-            
+
             var pairsFromValidationMessageAttributes = attributes.OfType<ValidationMessageAttribute>()
                 .Select(attr => new KeyValuePair<string, object>(attr.Name,
                     attr.IsFunction ? (object) new JRaw(attr.MessageExpression) : attr.MessageExpression));
@@ -495,6 +511,7 @@ namespace NFormlySchema
             public string? ParentKey { get; }
 
             private bool Equals(CacheKey other) => Type == other.Type && ParentKey == other.ParentKey;
+
             public override bool Equals(object? obj) =>
                 ReferenceEquals(this, obj) || obj is CacheKey other && Equals(other);
 
