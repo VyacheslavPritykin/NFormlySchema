@@ -12,12 +12,12 @@ Formly Schema is used by the ngx-formly (https://formly.dev) project which is a 
 Documentation: https://github.com/VyacheslavPritykin/NFormlySchema#readme</Description>
         <RepositoryUrl>https://github.com/VyacheslavPritykin/NFormlySchema</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>fixes:
- - Treat TimeSpan as a simple type</PackageReleaseNotes>
+        <PackageReleaseNotes>features:
+  - Add ability to specify the FieldTypeAttribute at the class level in order to easily implement the tabs example https://formly.dev/examples/advanced/tabs without extra property nesting</PackageReleaseNotes>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.0</AssemblyVersion>
-        <FileVersion>1.1.1</FileVersion>
-        <PackageVersion>1.1.1</PackageVersion>
+        <FileVersion>1.2.0</FileVersion>
+        <PackageVersion>1.2.0</PackageVersion>
         <PackageTags>formly schema .net generator generation</PackageTags>
         <Copyright>Copyright © Vyacheslav Pritykin, 2020</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
