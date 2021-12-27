@@ -237,7 +237,7 @@ Messages:
 `NFormlySchema.FieldGroupAttribute: ClassName`
 
 ##### FieldArray
-Only `ICollection` of simple types is supported for now.
+Only `ICollection` of simple types and `<CustomClass>[] Array` are supported for now.
 
 ## Field order
 The `GetProperties` method does not guarantee that it will return properties in declaration order, so you can
