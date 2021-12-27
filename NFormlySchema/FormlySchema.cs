@@ -39,7 +39,7 @@ namespace NFormlySchema
         {
             if (Cache.TryGetValue(new CacheKey(type, parentKey), out FormlyFieldConfigCollection result))
                 return result;
-            
+
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
             result = new FormlyFieldConfigCollection(type.GetProperties(bindingFlags)
                 .Select(propertyInfo => new
@@ -81,7 +81,7 @@ namespace NFormlySchema
                     }
                 };
             }
-            
+
             Cache.TryAdd(new CacheKey(type, parentKey), result);
 
             return result;
@@ -140,6 +140,19 @@ namespace NFormlySchema
             return formlyFieldConfig;
         }
 
+        private static FormlyFieldConfig BuildFormlyFieldConfigForCustomArrayElement(PropertyInfo pi, FormlyGenerationSettings settings)
+        {
+            var arrayElementType = pi.PropertyType.GetElementType();
+            var fieldGroupForArrayElement = FromType(arrayElementType, settings);
+            var formlyFieldConfig = new FormlyFieldConfig
+            {
+                FieldGroup = fieldGroupForArrayElement
+            };
+            return formlyFieldConfig;
+        }
+
+
+
         private static FormlyFieldConfig? ResolveFieldArray(PropertyInfo propertyInfo, FormlyGenerationSettings setting)
         {
             if (!propertyInfo.PropertyType.IsCollection())
@@ -148,8 +161,10 @@ namespace NFormlySchema
             var elementType = propertyInfo.PropertyType.GetElementType()!;
             if (elementType.IsSimple())
                 return BuildFormlyFieldConfigForSimpleArrayElement(elementType);
+            else
+                return BuildFormlyFieldConfigForCustomArrayElement(propertyInfo, setting);
 
-            return null; // TODO
+            // return null; // TODO
         }
 
         private static FormlyFieldConfigCollection? ResolveFieldGroup(PropertyInfo propertyInfo,
@@ -192,7 +207,7 @@ namespace NFormlySchema
         {
             var validators = attributes.OfType<ValidatorsAttribute>()
                 .Where(x => x.IsAsync == isAsync)
-                .SelectMany(x => x.IsFunction ? x.Validators.Select(v => (object) new JRaw(v)) : x.Validators)
+                .SelectMany(x => x.IsFunction ? x.Validators.Select(v => (object)new JRaw(v)) : x.Validators)
                 .ToList();
             return validators.Any() ? new ValidatorsValidationCollection(validators) : null;
         }
@@ -208,7 +223,7 @@ namespace NFormlySchema
             var pairs = attributes.OfType<ExpressionPropertyAttribute>()
                 .Select(attr => new KeyValuePair<string, object>(
                     attr.Property,
-                    attr.IsFunction ? (object) new JRaw(attr.Expression) : attr.Expression))
+                    attr.IsFunction ? (object)new JRaw(attr.Expression) : attr.Expression))
                 .ToList();
 
             return pairs.Any() ? new ExpressionPropertyDictionary(pairs) : null;
@@ -244,12 +259,12 @@ namespace NFormlySchema
 
         private static Addon? ResolveAddonLeft(Attribute[] attributes) =>
             attributes.OfType<AddonLeftAttribute>()
-                .Select(x => new Addon {Class = x.Class, Text = x.Text})
+                .Select(x => new Addon { Class = x.Class, Text = x.Text })
                 .FirstOrDefault();
 
         private static Addon? ResolveAddonRight(Attribute[] attributes) =>
             attributes.OfType<AddonRightAttribute>()
-                .Select(x => new Addon {Class = x.Class, Text = x.Text})
+                .Select(x => new Addon { Class = x.Class, Text = x.Text })
                 .FirstOrDefault();
 
         private static int? ResolveRows(Attribute[] attributes) =>
@@ -260,7 +275,7 @@ namespace NFormlySchema
             var multipleAttribute = attributes.OfType<MultipleAttribute>().FirstOrDefault();
             if (multipleAttribute != null)
             {
-                return multipleAttribute.Multiple ? true : (bool?) null;
+                return multipleAttribute.Multiple ? true : (bool?)null;
             }
 
             if (propertyType.IsEnum && propertyType.GetCustomAttribute<FlagsAttribute>() != null)
@@ -284,7 +299,7 @@ namespace NFormlySchema
                                 ?? memberInfo.GetCustomAttribute<DataMemberAttribute>()?.Name
                                 ?? memberInfo.Name;
                     var group = memberInfo.GetCustomAttribute<EnumValueGroupAttribute>()?.Name;
-                    options.Add(new {label, value, group});
+                    options.Add(new { label, value, group });
                 }
 
                 return options;
@@ -306,7 +321,7 @@ namespace NFormlySchema
                     var label = labelPropertyInfo?.GetValue(element);
                     var group = groupPropertyInfo?.GetValue(element);
 
-                    options.Add(new {value, label, group});
+                    options.Add(new { value, label, group });
                 }
 
                 return options;
@@ -336,13 +351,13 @@ namespace NFormlySchema
         private static MessageDictionary? ResolveValidationMessages(Attribute[] attributes)
         {
             var pairsFromValidationAttributes = attributes.OfType<ValidationAttribute>()
-                .Select(attr => new {ValidationName = ResolveValidationName(attr), attr.ErrorMessage})
+                .Select(attr => new { ValidationName = ResolveValidationName(attr), attr.ErrorMessage })
                 .Where(x => x.ValidationName != null && !string.IsNullOrEmpty(x.ErrorMessage))
                 .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage));
 
             var pairsFromValidationMessageAttributes = attributes.OfType<ValidationMessageAttribute>()
                 .Select(attr => new KeyValuePair<string, object>(attr.Name,
-                    attr.IsFunction ? (object) new JRaw(attr.MessageExpression) : attr.MessageExpression));
+                    attr.IsFunction ? (object)new JRaw(attr.MessageExpression) : attr.MessageExpression));
 
             var keyValuePairs = pairsFromValidationAttributes.Concat(pairsFromValidationMessageAttributes).ToList();
 
@@ -360,7 +375,7 @@ namespace NFormlySchema
             };
 
         private static bool? ResolveDisabled(Attribute[] attributes) =>
-            attributes.OfType<ReadOnlyAttribute>().FirstOrDefault()?.IsReadOnly == true ? true : (bool?) null;
+            attributes.OfType<ReadOnlyAttribute>().FirstOrDefault()?.IsReadOnly == true ? true : (bool?)null;
 
         private static string? ResolvePattern(Attribute[] attributes) =>
             attributes.OfType<RegularExpressionAttribute>().FirstOrDefault()?.Pattern;
@@ -397,7 +412,7 @@ namespace NFormlySchema
                 return null;
 
             return hideExpressionAttribute.IsFunction
-                ? (object?) new JRaw(hideExpressionAttribute.Expression)
+                ? (object?)new JRaw(hideExpressionAttribute.Expression)
                 : hideExpressionAttribute.Expression;
         }
 

@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-6 p-3">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+  </div>
+  <div class="col-6 p-3">
+    <pre class="border border-primary rounded p-2 ml-2 mr-2">{{ model | json }}</pre>
+  </div>
+</div>
