@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -84,7 +85,7 @@ namespace NFormlySchema.UnitTests.Examples
             // act
             var formlySchema = FormlySchema.FromType<IntroductionExample>();
             var formlySchemaJson = formlySchema.ToJson();
-
+ 
             // assert
             _testOutputHelper.WriteLine(formlySchemaJson);
             formlySchemaJson.Should().Be(expectedFormlySchema);

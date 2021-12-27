@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NFormlySchema.Generation;
+using NFormlySchema.Samples.Shared;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -117,7 +120,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"required", "Custom"}}
+                        Messages = new MessageDictionary { { "required", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -210,7 +213,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"maxLength", "Custom"}}
+                        Messages = new MessageDictionary { { "maxLength", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -223,7 +226,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"minLength", "Custom"}}
+                        Messages = new MessageDictionary { { "minLength", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -293,7 +296,7 @@ namespace NFormlySchema.UnitTests
                 {
                     Key = nameof(Foo.CustomWrapper),
                     Type = "input",
-                    Wrappers = new WrapperCollection {"panel1", "panel2"}
+                    Wrappers = new WrapperCollection { "panel1", "panel2" }
                 },
                 new FormlyFieldConfig
                 {
@@ -599,7 +602,82 @@ namespace NFormlySchema.UnitTests
 
             _testOutputHelper.WriteLine(schema.ToJson());
         }
+
+
+
+        [Fact]
+        public void CustomObjectFieldArray()
+        {
+            // act
+            var schema = FormlySchema.FromType<CustomObjectFieldArrayRoot>();
+
+            var expected = new FormlyFieldConfigCollection
+            {
+                new FormlyFieldConfig{
+                    Key= "PurchaseOrderRef",
+                    Type = "input",
+                    TemplateOptions= new FormlyTemplateOptions{
+                        Label = "Purchase Order Ref"
+                    }
+                },
+                new FormlyFieldConfig{
+                    Key= "PurchaseTimestamp",
+                    Type = "input",
+                    TemplateOptions = new FormlyTemplateOptions{
+                        Type = "datetime-local",
+                        Label = "Purchase Timestamp"
+                    }
+                },
+                new FormlyFieldConfig{
+                    Key= "OrderedItems",
+                    Type = "repeat",
+                    Wrappers = new WrapperCollection{
+                     "panel"
+                    },
+                    TemplateOptions = new FormlyTemplateOptions{
+                        Label = "Ordered Items"
+                    },
+                    FieldArray = new FormlyFieldConfig{
+                        FieldGroup = new FormlyFieldConfigCollection{
+                            new FormlyFieldConfig{
+                            Key = "ItemKey",
+                            Type = "input",
+                            TemplateOptions = new FormlyTemplateOptions{
+                                    Label = "Item Key"
+                                }
+                            },
+                        new FormlyFieldConfig{
+                            Key = "ItemPrice",
+                            Type = "input",
+                            TemplateOptions = new FormlyTemplateOptions{
+                                    Type = "number",
+                                    Label = "Item Price"
+                                }
+                            },
+                        new FormlyFieldConfig{
+                            Key = "ItemQuantity",
+                            Type = "input",
+                            TemplateOptions = new FormlyTemplateOptions{
+                                    Type = "number",
+                                    Label = "Item Quantity"
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            _testOutputHelper.WriteLine($"Expected == Actual: {expected.ToJson() == schema.ToJson()}");
+
+            _testOutputHelper.WriteLine($"Expected:\n {expected.ToJson()}");
+            _testOutputHelper.WriteLine($"Actual:\n {schema.ToJson()}");
+
+            // assert
+            schema.Should().BeEquivalentTo(expected);
+
+        }
     }
+
 
     internal class EmptyType
     {

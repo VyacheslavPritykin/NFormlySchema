@@ -10,6 +10,8 @@ NFormlySchema is a .NET library for the Formly Schema generation.
 Formly Schema is used by the [ngx-formly](https://github.com/ngx-formly/ngx-formly) 
 project which is a dynamic (JSON powered) form library for Angular.
 
+Review `NFormlySchema.Samples.AngularSpa` for a working client/server example along with custom type templates for Formly. NFormlySchema.Samples.Shared.CustomObjectFieldArrayRoot is the class used for server side form configuration.
+
 ## Usage
 ```csharp
 using NFormlySchema;
@@ -237,7 +239,7 @@ Messages:
 `NFormlySchema.FieldGroupAttribute: ClassName`
 
 ##### FieldArray
-Only `ICollection` of simple types is supported for now.
+Only `ICollection` of simple types and `<CustomClass>[] Array` are supported for now. Review `NFormlySchema.Samples.Shared.CustomObjectFieldArrayRoot` for a sample of using an array.
 
 ## Field order
 The `GetProperties` method does not guarantee that it will return properties in declaration order, so you can
