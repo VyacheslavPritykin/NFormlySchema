@@ -336,9 +336,9 @@ namespace NFormlySchema
         private static MessageDictionary? ResolveValidationMessages(Attribute[] attributes)
         {
             var pairsFromValidationAttributes = attributes.OfType<ValidationAttribute>()
-                .Select(attr => new {ValidationName = ResolveValidationName(attr), attr.ErrorMessage})
+                .Select(attr => new { ValidationName = ResolveValidationName(attr), attr.ErrorMessage })
                 .Where(x => x.ValidationName != null && !string.IsNullOrEmpty(x.ErrorMessage))
-                .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage));
+                .Select(x => new KeyValuePair<string, object>(x.ValidationName!, x.ErrorMessage ?? "Error"));
 
             var pairsFromValidationMessageAttributes = attributes.OfType<ValidationMessageAttribute>()
                 .Select(attr => new KeyValuePair<string, object>(attr.Name,
