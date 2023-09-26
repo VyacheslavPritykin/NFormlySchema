@@ -38,7 +38,8 @@ namespace NFormlySchema.UnitTests
             var schema = FormlySchema.FromType<Foo>();
 
             // assert
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Key = nameof(Foo.FirstName),
@@ -117,7 +118,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"required", "Custom"}}
+                        Messages = new MessageDictionary { { "required", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -165,8 +166,8 @@ namespace NFormlySchema.UnitTests
                     Type = "input",
                     ExpressionProperties = new ExpressionPropertyDictionary
                     {
-                        {"templateOptions.disabled", "!model.text"},
-                        {"a", "b"}
+                        { "templateOptions.disabled", "!model.text" },
+                        { "a", "b" }
                     }
                 },
                 new FormlyFieldConfig
@@ -175,7 +176,7 @@ namespace NFormlySchema.UnitTests
                     Type = "input",
                     ExpressionProperties = new ExpressionPropertyDictionary
                     {
-                        {"a", new JRaw("() => b")}
+                        { "a", new JRaw("() => b") }
                     }
                 },
                 new FormlyFieldConfig
@@ -210,7 +211,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"maxLength", "Custom"}}
+                        Messages = new MessageDictionary { { "maxLength", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -223,7 +224,7 @@ namespace NFormlySchema.UnitTests
                     },
                     Validation = new Validation
                     {
-                        Messages = new MessageDictionary {{"minLength", "Custom"}}
+                        Messages = new MessageDictionary { { "minLength", "Custom" } }
                     }
                 },
                 new FormlyFieldConfig
@@ -270,9 +271,9 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "Red", value = "Red"},
-                            new {label = "Green", value = "Green"},
-                            new {label = "Blue", value = "Blue"}
+                            new { label = "Red", value = "Red" },
+                            new { label = "Green", value = "Green" },
+                            new { label = "Blue", value = "Blue" }
                         }
                     }
                 },
@@ -284,8 +285,8 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "Midnight Green", value = "GreenColor"},
-                            new {label = "Deep Blue", value = "BlueColor"}
+                            new { label = "Midnight Green", value = "GreenColor" },
+                            new { label = "Deep Blue", value = "BlueColor" }
                         }
                     }
                 },
@@ -293,7 +294,7 @@ namespace NFormlySchema.UnitTests
                 {
                     Key = nameof(Foo.CustomWrapper),
                     Type = "input",
-                    Wrappers = new WrapperCollection {"panel1", "panel2"}
+                    Wrappers = new WrapperCollection { "panel1", "panel2" }
                 },
                 new FormlyFieldConfig
                 {
@@ -304,12 +305,12 @@ namespace NFormlySchema.UnitTests
                         Multiple = true,
                         Options = new OptionCollection
                         {
-                            new {label = "None", value = "None"},
-                            new {label = "Create", value = "Create"},
-                            new {label = "Read", value = "Read"},
-                            new {label = "Update", value = "Update"},
-                            new {label = "Delete", value = "Delete"},
-                            new {label = "All", value = "All"},
+                            new { label = "None", value = "None" },
+                            new { label = "Create", value = "Create" },
+                            new { label = "Read", value = "Read" },
+                            new { label = "Update", value = "Update" },
+                            new { label = "Delete", value = "Delete" },
+                            new { label = "All", value = "All" },
                         }
                     }
                 },
@@ -321,12 +322,12 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "None", value = "None"},
-                            new {label = "Create", value = "Create"},
-                            new {label = "Read", value = "Read"},
-                            new {label = "Update", value = "Update"},
-                            new {label = "Delete", value = "Delete"},
-                            new {label = "All", value = "All"},
+                            new { label = "None", value = "None" },
+                            new { label = "Create", value = "Create" },
+                            new { label = "Read", value = "Read" },
+                            new { label = "Update", value = "Update" },
+                            new { label = "Delete", value = "Delete" },
+                            new { label = "All", value = "All" },
                         }
                     }
                 },
@@ -411,10 +412,10 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "Iron Man", value = "IronMan", group = "Male"},
-                            new {label = "Captain America", value = "CaptainAmerica", group = "Male"},
-                            new {label = "Black Widow", value = "BlackWidow", group = "Female"},
-                            new {label = "Captain Marvel", value = "CaptainMarvel"},
+                            new { label = "Iron Man", value = "IronMan", group = "Male" },
+                            new { label = "Captain America", value = "CaptainAmerica", group = "Male" },
+                            new { label = "Black Widow", value = "BlackWidow", group = "Female" },
+                            new { label = "Captain Marvel", value = "CaptainMarvel" },
                         }
                     }
                 },
@@ -449,7 +450,8 @@ namespace NFormlySchema.UnitTests
                     Key = nameof(Foo.WithClassName),
                     Type = "input",
                     ClassName = "custom-class",
-                });
+                }
+            });
 
             LogSchema(schema);
         }
@@ -466,7 +468,8 @@ namespace NFormlySchema.UnitTests
             var schema = FormlySchema.FromType<VariousInputTypes>();
 
             // assert
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Key = nameof(VariousInputTypes.DateTime),
@@ -595,7 +598,7 @@ namespace NFormlySchema.UnitTests
                         Type = "file"
                     }
                 }
-            );
+            });
 
             _testOutputHelper.WriteLine(schema.ToJson());
         }

@@ -24,7 +24,8 @@ namespace NFormlySchema.UnitTests
             // assert
             _testOutputHelper.WriteLine(schema.ToJson());
 
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Type = "tabs",
@@ -48,7 +49,8 @@ namespace NFormlySchema.UnitTests
                             }
                         }
                     }
-                });
+                }
+            });
         }
     }
 

@@ -22,7 +22,8 @@ namespace NFormlySchema.UnitTests
 
             // assert
             _testOutputHelper.WriteLine(schema.ToJson());
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Key = nameof(Parent.EmptyChild),
@@ -53,9 +54,11 @@ namespace NFormlySchema.UnitTests
                 },
                 new FormlyFieldConfig
                 {
-                    Key = $"{nameof(InlineChildWithNestedData)}.{nameof(InlineChildWithNestedData.InlineChildWithData)}.{nameof(InlineChildWithNestedData.InlineChildWithData.ZipCode)}",
+                    Key =
+                        $"{nameof(InlineChildWithNestedData)}.{nameof(InlineChildWithNestedData.InlineChildWithData)}.{nameof(InlineChildWithNestedData.InlineChildWithData.ZipCode)}",
                     Type = "input"
-                });
+                }
+            });
         }
     }
 

@@ -22,7 +22,8 @@ namespace NFormlySchema.UnitTests
 
             // assert
             _testOutputHelper.WriteLine(schema.ToJson());
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Key = nameof(CollectionRoot.Names),
@@ -31,7 +32,8 @@ namespace NFormlySchema.UnitTests
                     {
                         Type = "input"
                     }
-                });
+                }
+            });
         }
     }
 

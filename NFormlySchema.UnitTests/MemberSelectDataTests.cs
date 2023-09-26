@@ -15,7 +15,8 @@ namespace NFormlySchema.UnitTests
             var schema = FormlySchema.FromType<MemberSelectData>();
 
             // assert
-            schema.Should().BeEquivalentTo(
+            schema.Should().BeEquivalentTo(new[]
+            {
                 new FormlyFieldConfig
                 {
                     Key = nameof(MemberSelectData.SameTypeProperty),
@@ -24,9 +25,9 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "label1", value = "value1", group = "group1"},
-                            new {label = "label2", value = "value2"},
-                            new {label = "label3", value = "value3", group = "group3"},
+                            new { label = "label1", value = "value1", group = "group1" },
+                            new { label = "label2", value = "value2" },
+                            new { label = "label3", value = "value3", group = "group3" },
                         }
                     }
                 },
@@ -38,8 +39,8 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "label1", value = "value1", group = "group1"},
-                            new {label = "label2", value = "value2", group = "group2"},
+                            new { label = "label1", value = "value1", group = "group1" },
+                            new { label = "label2", value = "value2", group = "group2" },
                         }
                     }
                 },
@@ -51,9 +52,9 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "label1", value = "value1", group = "group1"},
-                            new {label = "label2", value = "value2"},
-                            new {label = "label3", value = "value3", group = "group3"},
+                            new { label = "label1", value = "value1", group = "group1" },
+                            new { label = "label2", value = "value2" },
+                            new { label = "label3", value = "value3", group = "group3" },
                         }
                     }
                 },
@@ -65,8 +66,8 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "label1", value = "value1", group = "group1"},
-                            new {label = "label2", value = "value2", group = "group2"},
+                            new { label = "label1", value = "value1", group = "group1" },
+                            new { label = "label2", value = "value2", group = "group2" },
                         }
                     }
                 },
@@ -78,12 +79,12 @@ namespace NFormlySchema.UnitTests
                     {
                         Options = new OptionCollection
                         {
-                            new {label = "label1", value = "value1", group = "group1"},
-                            new {label = "label2", value = "value2", group = "group2"},
+                            new { label = "label1", value = "value1", group = "group1" },
+                            new { label = "label2", value = "value2", group = "group2" },
                         }
                     }
                 }
-            );
+            });
         }
     }
 
@@ -123,9 +124,9 @@ namespace NFormlySchema.UnitTests
 
         public static IEnumerable<Data> SameTypePropertyData => new[]
         {
-            new Data {Label = "label1", Value = "value1", Group = "group1"},
-            new Data {Label = "label2", Value = "value2"},
-            new Data {Label = "label3", Value = "value3", Group = "group3"},
+            new Data { Label = "label1", Value = "value1", Group = "group1" },
+            new Data { Label = "label2", Value = "value2" },
+            new Data { Label = "label3", Value = "value3", Group = "group3" },
         };
 
         public static IEnumerable<Data> SameTypeMethodData(int count) =>
@@ -159,9 +160,9 @@ namespace NFormlySchema.UnitTests
     {
         public static IEnumerable<Data> OtherTypePropertyData => new[]
         {
-            new Data {Label = "label1", Value = "value1", Group = "group1"},
-            new Data {Label = "label2", Value = "value2"},
-            new Data {Label = "label3", Value = "value3", Group = "group3"},
+            new Data { Label = "label1", Value = "value1", Group = "group1" },
+            new Data { Label = "label2", Value = "value2" },
+            new Data { Label = "label3", Value = "value3", Group = "group3" },
         };
 
         public static IEnumerable<Data> OtherTypeMethodData(int count) =>
