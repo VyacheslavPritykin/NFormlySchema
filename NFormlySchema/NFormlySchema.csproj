@@ -15,8 +15,8 @@ Documentation: https://github.com/VyacheslavPritykin/NFormlySchema#readme</Descr
         <PackageReleaseNotes>- Update dependencies</PackageReleaseNotes>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.0</AssemblyVersion>
-        <FileVersion>1.2.1</FileVersion>
-        <PackageVersion>1.2.1</PackageVersion>
+        <FileVersion>1.2.2</FileVersion>
+        <PackageVersion>1.2.2</PackageVersion>
         <PackageTags>formly schema .net generator generation</PackageTags>
         <Copyright>Copyright © Vyacheslav Pritykin, 2020</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
